@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import { nanoid } from "nanoid";
 import { useMutation } from "@tanstack/react-query";
 import {client} from "../lib/client";
+import { useRouter } from "next/navigation";
 
 const ANIMALS = ["Lion", "Tiger", "Elephant", "Giraffe", "Zebra"];
 const STORAGE_KEY = "chat_username";
@@ -12,6 +13,7 @@ const generateRandomUsername = () => {
 }
 export default function Home() {
   const [username, setUsername] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const main = ()=>{
@@ -30,8 +32,13 @@ export default function Home() {
   const{mutate:createRoom} = useMutation({
     mutationFn: async () => {
       const res = await client.rooms.create.post();
+
+      if(res.status == 200) {
+        router.push(`/room/${res.data?.roomId}`);
+      }
     }
   })
+
   return (
    <main className="flex min-h-screen flex-col items-center justify-center p-4">
     <div className="w-full max-w-md space-y-8">
