@@ -1,13 +1,21 @@
 "use client"
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Suspense} from "react";
 import { nanoid } from "nanoid";
 import { useMutation } from "@tanstack/react-query";
 import {client} from "../lib/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUsername } from "@/hooks/use-username";
 
+const Page = () =>{
+  return (
+    <Suspense>
+      <Home />
+    </Suspense>
+  )
+}
 
-export default function Home() {
+
+function Home() {
   const {username} = useUsername()
   const router = useRouter();
 
@@ -76,3 +84,5 @@ export default function Home() {
    </main>
   );
 }
+
+export default Page;
