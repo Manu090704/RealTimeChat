@@ -2,7 +2,7 @@
 import { useUsername } from "@/hooks/use-username";
 import { client } from "@/lib/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { useRef, useState } from "react";
 import { useRealtime } from "@/lib/realtime-client";
@@ -16,6 +16,7 @@ function formatTimeRemaining(seconds:number){
 const Page = () => {
     const params = useParams();
     const roomId = params.roomId as string;
+    const router = useRouter()
 
     const {username} = useUsername()
     const [input, setInput] = useState("")
@@ -37,6 +38,10 @@ const Page = () => {
         onData: ({event}) => {
             if(event === "chat.message"){
                 refetch()
+            }
+
+            if(event === "chat.destroy"){
+                router.push("/?destroyed=true")
             }
         }
     })
